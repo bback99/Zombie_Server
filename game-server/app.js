@@ -25,7 +25,7 @@ app.configure('production|development', 'connector', function(){
   app.filter(pomelo.timeout());
 });
 
-// Configure for chat server
+// Configure for room server
 app.configure('production|development', 'room', function() {
 	app.set('roomService', new roomService(app));
 });

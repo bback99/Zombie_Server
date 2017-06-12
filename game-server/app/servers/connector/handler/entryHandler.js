@@ -23,14 +23,15 @@ Handler.prototype.entry = function(msg, session, next) {
 	//duplicate log in
 	if( !! sessionService.getByUid(uid)) {
 		next(null, {
-			code: 500,
+			code: 501,
 			error: true
 		});
+		console.error("Uid is duplicated. " + uid);
 		return;
 	}
 
 	session.bind(uid);
-	// session.set('rid', rid);
+	session.set('rid', rid);
 	// session.set('username', msg.username);
 	// session.set('X', msg.X);
 	// session.set('Y', msg.Y);
@@ -42,19 +43,13 @@ Handler.prototype.entry = function(msg, session, next) {
 	session.on('closed', onUserLeave.bind(null, self.app));
 
 	//put user into channel
-	console.error("1. name: " + msg.username, ", X: " + msg.X + ", Y: " + msg.Y);
-	self.app.rpc.room.roomRemote.add(session, uid, self.app.get('serverId'), msg.username, msg.X, msg.Y, null);
-
-	// self.app.rpc.channel.channelRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
-	// 	console.error("user length: " + users.length);
-
-	// 	for(var i=0; i<users.length; i++) {
-	// 		console.debug("3. name: " + users[i]);
-	// 	}
-	// 	next(null, {
-	// 		users:users
-	// 	});
-	// });
+	var lstUsers = [];
+	self.app.rpc.room.roomRemote.add(session, uid, msg.username, msg.X, msg.Y, function(lstUsers) {
+		console.error("user length: " + lstUsers.length);
+		next(null, {
+			users: lstUsers
+		})
+	});
 }
 
 /**
@@ -68,5 +63,5 @@ var onUserLeave = function(app, session) {
 	if(!session || !session.uid) {
 		return;
 	}
-	self.app.rpc.room.roomRemote.kick(session, session.uid, app.get('serverId'), session.get('rid'), null);
+	app.rpc.room.roomRemote.kick(session, session.uid, app.get('serverId'), null);
 };

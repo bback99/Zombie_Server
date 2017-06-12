@@ -1,3 +1,5 @@
+var utils = require('../../../util/utils');
+
 module.exports = function(app) {
 	return new roomRemote(app);
 };
@@ -5,8 +7,6 @@ module.exports = function(app) {
 var roomRemote = function(app) {
 	this.app = app;
 	this.roomService = app.get('roomService');
-
-    console.error("room: " + this.roomService);
 };
 
 /**
@@ -18,31 +18,15 @@ var roomRemote = function(app) {
  * @param {boolean} flag channel parameter
  *
  */
-roomRemote.prototype.add = function(uid, sid, playerName, X, Y, cb) {
+roomRemote.prototype.add = function(uid, playerName, X, Y, cb) {
 
-    console.error("2. name: " + playerName, ", X: " + X + ", Y: " + Y);
-
-    var users = this.roomService.addRoom(uid, sid, playerName, X, Y);
-
-    console.error("users: " + users.length);
-
-
-
-	// var channel = this.roomService.getChannel(name, flag);
-	// var username = uid.split('*')[0];
-	// var param = {
-	// 	route: 'onAdd',
-	// 	user: username,
-	// 	X: msg.X,
-	// 	Y: msg.Y
-	// };
-	// channel.pushMessage(param);
-
-	// if( !! channel) {
-	// 	channel.add(uid, sid);
-	// }
-
-	// cb(this.get(name, flag));
+    var users = this.roomService.addRoom(uid, playerName, X, Y);
+	if (users) {
+		cb(users);
+	}
+	else {
+		console.error("ErrorCode: " + users);
+	}
 };
 
 /**
@@ -74,17 +58,7 @@ roomRemote.prototype.get = function(name, flag) {
  * @param {String} name channel name
  *
  */
-roomRemote.prototype.kick = function(uid, sid, name, cb) {
-	var channel = this.channelService.getChannel(name, false);
-	// leave channel
-	if( !! channel) {
-		channel.leave(uid, sid);
-	}
-	var username = uid.split('*')[0];
-	var param = {
-		route: 'onLeave',
-		user: username
-	};
-	channel.pushMessage(param);
+roomRemote.prototype.kick = function(uid, sid, cb) {
+	this.roomService.leave(uid, sid);
 	cb();
 };
