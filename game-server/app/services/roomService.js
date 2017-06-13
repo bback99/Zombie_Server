@@ -119,7 +119,7 @@ roomService.prototype.pushMessage = function(uid, param, cb) {
   if(channel) {
     //channel.pushMessage(param);
     channel.pushMessage(param.route, param, cb);
-    cb();
+    //cb();
   }
   else {
     cb(new Error("can't find channel: " + sid));

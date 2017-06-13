@@ -31,8 +31,8 @@ handler.notifyPlayerLocation = function(msg, session, next) {
 	};
 
 	this.roomService.pushMessage(session.uid, param, function() {
-		// next(null, {
-		// });
+		next(null, {
+		});
 	});
 
 	//console.error("sid: " + sid);
