@@ -7,19 +7,18 @@ module.exports = function(app) {
 var Handler = function(app) {
 	this.app = app;
 	this.roomService = app.get('roomService');
+	this.monsterManager = app.get('monsterManager');
 };
 
-var handler = Handler.prototype;
-
 /**
- * Send messages to users
+ * Send notifyPlayerLocation messages to users
  *
  * @param {Object} msg message from client
  * @param {Object} session
  * @param  {Function} next next stemp callback
  *
  */
-handler.notifyPlayerLocation = function(msg, session, next) {
+Handler.prototype.notifyPlayerLocation = function(msg, session, next) {
 
 	var username = session.uid.split('*')[0];
 	var param = {
@@ -34,14 +33,26 @@ handler.notifyPlayerLocation = function(msg, session, next) {
 		next(null, {
 		});
 	});
+};
 
-	//console.error("sid: " + sid);
+/**
+ * recv killed monsters messages to users
+ *
+ * @param {Object} msg message from client
+ * @param {Object} session
+ * @param  {Function} next next stemp callback
+ *
+ */
+Handler.prototype.requestKilledMonster = function(msg, session, next) {
 
-	//var channel = channelService.getChannel(sid, true);
-	//channel.pushMessage(param);
-
-	// next(null, {
-	// 	route: 'onNotifyPlayerLocation',
-	// 	msg: param
-	// });
+	//console.error("idKilledMonster: " + msg.idKilledMonster);
+	var newMob = this.monsterManager.killedMonster(msg.idKilledMonster);
+	var monsters = [];
+	monsters.push(newMob);
+	//console.error("added Monster index: " + newMob.mobIndex);
+	
+	next(null, {
+		route: 'onNotifyNewMonster',
+		monsters: monsters
+	});
 };

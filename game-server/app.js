@@ -1,12 +1,13 @@
 var pomelo = require('pomelo');
 var routeUtil = require('./app/util/routeUtil');
 var roomService = require('./app/services/roomService');
+var monsterManager = require('./app/servers/room/mob/monsterManager');
 
 /**
  * Init app for client.
  */
 var app = pomelo.createApp();
-app.set('name', 'HelloWorld');
+app.set('name', 'ZombieServer');
 
 // app configuration
 app.configure('production|development', 'connector', function(){
@@ -28,6 +29,7 @@ app.configure('production|development', 'connector', function(){
 // Configure for room server
 app.configure('production|development', 'room', function() {
 	app.set('roomService', new roomService(app));
+  app.set('monsterManager', new monsterManager(app));
 });
 
 // start app

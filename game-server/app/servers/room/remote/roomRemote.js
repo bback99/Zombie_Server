@@ -7,6 +7,7 @@ module.exports = function(app) {
 var roomRemote = function(app) {
 	this.app = app;
 	this.roomService = app.get('roomService');
+	this.monsterManager = app.get('monsterManager');
 };
 
 /**
@@ -22,7 +23,8 @@ roomRemote.prototype.add = function(uid, playerName, X, Y, cb) {
 
     var users = this.roomService.addRoom(uid, playerName, X, Y);
 	if (users) {
-		cb(users);
+		var monsters = this.monsterManager.getMonsters();
+		cb(users, monsters);
 	}
 	else {
 		console.error("ErrorCode: " + users);
@@ -60,5 +62,9 @@ roomRemote.prototype.get = function(name, flag) {
  */
 roomRemote.prototype.kick = function(uid, sid, cb) {
 	this.roomService.leave(uid, sid);
+
+	if (this.roomService.getUsers() <= 0) {
+		this.monsterManager.initMonster();
+	}
 	cb();
 };

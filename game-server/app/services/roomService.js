@@ -153,3 +153,7 @@ var getSidByUid = function(uid, app) {
   }
   return null;
 };
+
+roomService.prototype.getUsers = function() {
+  return this.uidMap.length;
+}
