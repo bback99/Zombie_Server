@@ -29,6 +29,33 @@ Handler.prototype.notifyPlayerLocation = function(msg, session, next) {
 		angle: msg.angle,
 	};
 
+	// save player location
+	this.roomService.savePlayerLocation(username, msg.X, msg.Y);
+
+	this.roomService.pushMessage(session.uid, param, function() {
+		next(null, {
+		});
+	});
+};
+
+/**
+ * recv player shooting
+ *
+ * @param {Object} msg message from client
+ * @param {Object} session
+ * @param  {Function} next next stemp callback
+ *
+ */
+Handler.prototype.notifyPlayerShooting = function(msg, session, next) {
+	var username = session.uid.split('*')[0];
+	var param = {
+		route: 'onNotifyPlayerShooting',
+		username: username,
+		X: msg.X,
+		Y: msg.Y,
+		angle: msg.angle,
+	};
+
 	this.roomService.pushMessage(session.uid, param, function() {
 		next(null, {
 		});
@@ -45,14 +72,21 @@ Handler.prototype.notifyPlayerLocation = function(msg, session, next) {
  */
 Handler.prototype.requestKilledMonster = function(msg, session, next) {
 
-	//console.error("idKilledMonster: " + msg.idKilledMonster);
 	var newMob = this.monsterManager.killedMonster(msg.idKilledMonster);
 	var monsters = [];
 	monsters.push(newMob);
-	//console.error("added Monster index: " + newMob.mobIndex);
-	
-	next(null, {
-		route: 'onNotifyNewMonster',
+
+	var param = {
+		route: 'onNotifyMonsters',
+		killedMonster: msg.idKilledMonster,
 		monsters: monsters
+	};
+
+	this.roomService.pushMessage(session.uid, param, function() {
+		next(null, {
+			route: 'onNotifyMonsters',
+			killedMonster: msg.idKilledMonster,
+			monsters: monsters
+		});
 	});
 };

@@ -157,3 +157,29 @@ var getSidByUid = function(uid, app) {
 roomService.prototype.getUsers = function() {
   return this.uidMap.length;
 }
+
+roomService.prototype.getUserList = function() {
+  return this.uidMap;
+}
+
+/**
+ * save player location
+ */
+roomService.prototype.savePlayerLocation = function(username, x, y) {
+  var channel = this.app.get('channelService').getChannel('ZombieChannel', false);
+  if(!channel) {
+    console.error("error: " + sid + ", code: " + Code.ROOM.FA_CHANNEL_CREATE);
+    return -2;
+  }
+
+  // update player location
+  for(var i=0; i<this.uidMap.length; i++) {
+    if (this.uidMap[i].user_name == username) {
+      //console.error("before location x: " + this.uidMap[i].posX, "y: " + this.uidMap[i].posY);
+      this.uidMap[i].posX = this.uidMap[i].posX + x * 5;
+      this.uidMap[i].posY = this.uidMap[i].posY + y * 5;
+      //console.error("after location x: " + this.uidMap[i].posX, "y: " + this.uidMap[i].posY);
+      break;
+    }
+  }
+};
