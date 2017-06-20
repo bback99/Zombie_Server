@@ -9,7 +9,7 @@ exp.room = function(session, msg, app, cb) {
 		return;
 	}
 
-	console.error("servers: " + roomServers.length);
+	//console.error("servers: " + roomServers.length);
 
 	var res = dispatcher.dispatch(session.get('rid'), roomServers);
 

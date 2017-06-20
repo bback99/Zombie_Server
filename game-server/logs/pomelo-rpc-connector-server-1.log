@@ -15,3 +15,4 @@
 [2017-06-15 23:46:18.673] [ERROR] pomelo-rpc - [31m[mqtt-mailbox] [39mrpc socket connector-server-1 is error, remote server room-server-1 host: 127.0.0.1, port: 6050
 [2017-06-17 01:29:54.501] [ERROR] pomelo-rpc - [31m[mqtt-mailbox] [39mrpc socket connector-server-1 is error, remote server room-server-1 host: 127.0.0.1, port: 6050
 [2017-06-17 11:31:02.016] [ERROR] pomelo-rpc - [31m[mqtt-mailbox] [39mrpc socket connector-server-1 is error, remote server room-server-1 host: 127.0.0.1, port: 6050
+[2017-06-19 23:07:20.034] [ERROR] pomelo-rpc - [31m[mqtt-mailbox] [39mrpc socket connector-server-1 is error, remote server room-server-1 host: 127.0.0.1, port: 6050

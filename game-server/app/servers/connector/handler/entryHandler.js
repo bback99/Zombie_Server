@@ -46,7 +46,7 @@ Handler.prototype.entry = function(msg, session, next) {
 	var lstUsers = [];
 	var lstMonsters = [];
 	self.app.rpc.room.roomRemote.add(session, uid, msg.username, msg.X, msg.Y, function(lstUsers, lstMonsters) {
-		console.error("user length: " + lstUsers.length, ", monster length: " + lstMonsters.length);
+		//console.error("user length: " + lstUsers.length, ", monster length: " + lstMonsters.length);
 		next(null, {
 			users: lstUsers,
 			monsters: lstMonsters

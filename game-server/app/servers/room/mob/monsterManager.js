@@ -42,10 +42,10 @@ monsterManager.prototype.initMonster = function() {
   this.monsters.length = 0;
 
   this.addNewMonster();
-  this.addNewMonster();
-  this.addNewMonster();
-  this.addNewMonster();
-  this.addNewMonster();
+  // this.addNewMonster();
+  // this.addNewMonster();
+  // this.addNewMonster();
+  // this.addNewMonster();
 }
 
 
@@ -92,11 +92,10 @@ monsterManager.prototype.chase = function() {
           player = userlist[u];
 
         // calc distance between zombie and player
-        var dx = player.posX-mob.posX;
-        var dy = player.posY-mob.posY;
+        var dx = userlist[u].posX-mob.posX;
+        var dy = userlist[u].posY-mob.posY;
         var distance = Math.sqrt(dx*dx+dy*dy);
         if (min < 0 || min > distance) {
-          console.error("change username: " + this.user_name, ", min: " +  min + ", distance: " + distance);
           min = distance;
           player = userlist[u];
           mobIndex = mob.mobIndex; 
@@ -120,7 +119,7 @@ monsterManager.prototype.chase = function() {
       mob.posY += retY;
 
       if ((length/5) > 5.0) {
-        console.log("length: " + length);
+        //console.log("length: " + length);
 
         var param = {
           route: 'onChasePlayer',
