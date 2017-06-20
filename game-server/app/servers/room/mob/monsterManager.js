@@ -16,6 +16,7 @@ var monsterManager = function(app) {
   });
 
   this.timer.run();
+  this.user_name = null;
 };
 
 class Monster {
@@ -87,28 +88,30 @@ monsterManager.prototype.chase = function() {
 
       for(var u=0; u<userlist.length; u++) {
 
-        player = userlist[u];
+        if (player == null)
+          player = userlist[u];
 
         // calc distance between zombie and player
-        //console.error("mob X:" + mob.posX + ", y: " + mob.posY);
-        //console.error("player X:" + player.posX + ", y: " + player.posY);
-        var distance = Math.sqrt((mob.posX - player.posX)*2 + (mob.posY - player.posY)*2);
-        //console.error("mobIndex: " + mob.mobIndex + ", username: " + player.user_name + ", distance: " + distance);
-        if (min < 0) {
+        var dx = player.posX-mob.posX;
+        var dy = player.posY-mob.posY;
+        var distance = Math.sqrt(dx*dx+dy*dy);
+        if (min < 0 || min > distance) {
+          console.error("change username: " + this.user_name, ", min: " +  min + ", distance: " + distance);
           min = distance;
+          player = userlist[u];
+          mobIndex = mob.mobIndex; 
+          this.user_name = player.user_name;
         }
-        else if (min > distance) {
-          min = distance;
-        }
-        mobIndex = mob.mobIndex;
       }
 
       if (mob == null || player == null) {
-//        console.error("something is null");
         return;
       }
 
-      //console.error("mobIndex: " + mobIndex + ", distance: " + min);
+      //console.error("mob X:" + mob.posX + ", y: " + mob.posY);
+      //console.error("player X:" + player.posX + ", y: " + player.posY);
+      //console.error("mobIndex: " + mob.mobIndex + ", username: " + this.user_name + ", distance: " + min);
+      //console.error("username: " + this.user_name);
 
       // chasing
       var [length, retX, retY] = caculateDirection(mob, player);
@@ -116,7 +119,7 @@ monsterManager.prototype.chase = function() {
       mob.posX += retX;
       mob.posY += retY;
 
-      if (length > 10.0) {
+      if ((length/5) > 5.0) {
         console.log("length: " + length);
 
         var param = {
